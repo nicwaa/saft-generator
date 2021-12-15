@@ -1,0 +1,2 @@
+lxml  # xml-parsing
+dict2xml  # Converts dictionaries to xml

@@ -1,0 +1,12 @@
+<header>
+  <fiscalYear/>
+  <startDate/>
+  <endDate/>
+  <curCode/>
+  <dateCreated/>
+  <timeCreated/>
+  <softwareDesc/>
+  <softwareVersion/>
+  <softwareCompanyName/>
+  <auditfileVersion/>
+</header>
