@@ -43,8 +43,6 @@ class XmlGenerator:
 
 if __name__ == '__main__':
     header = XmlGenerator('header')
-    # test.add_sub_element('startDate', '2020-01-01')
-    # header.remove_sub_element('timeCreated')
     header.append_sub_elements('fiscalYear', 'header')
 
     print(header)
