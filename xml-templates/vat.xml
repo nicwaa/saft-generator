@@ -1,0 +1,8 @@
+<vat>
+    <vatCode/>
+    <vatPerc/>
+    <vatAmnt/>
+    <vatAmntTp/>
+    <vatBasAmnt/>
+    <accID/>
+</vat>

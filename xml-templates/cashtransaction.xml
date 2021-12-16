@@ -1,0 +1,26 @@
+<cashtransaction>
+    <nr/>
+    <transID/>
+    <transType/>
+    <transAmntIn/>
+    <transAmntEx/>
+    <amntTp/>
+    <empID/>
+    <custSupID/>
+    <periodNumber/>
+    <transDate/>
+    <transTime/>
+    <bookDate/>
+    <bookTime/>
+    <invoiceID/>
+    <refID/>
+    <desc/>
+    <signature/>
+    <keyVersion/>
+    <receiptNum/>
+    <receiptCopyNum/>
+    <receiptProformaNum/>
+    <receiptDeliveryNum/>
+    <voidTransaction/>
+    <trainingID/>
+</cashtransaction>

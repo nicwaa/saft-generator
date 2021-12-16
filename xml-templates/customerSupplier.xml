@@ -1,0 +1,12 @@
+<customerSupplier>
+    <custSupID/>
+    <custSupName/>
+    <custSupType/>
+    <contact/>
+    <telephone/>
+    <fax/>
+    <eMail/>
+    <website/>
+    <taxRegistrationCountry/>
+    <taxRegIdent/>
+</customerSupplier>

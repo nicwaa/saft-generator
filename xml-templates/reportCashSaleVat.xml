@@ -1,0 +1,9 @@
+<reportCashSaleVat>
+    <vatCode/>
+    <vatPerc/>
+    <cashSaleAmnt/>
+    <vatAmnt/>
+    <vatAmntTp/>
+    <accID/>
+    <accDesc/>
+</reportCashSaleVat>

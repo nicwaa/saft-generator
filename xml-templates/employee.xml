@@ -1,0 +1,8 @@
+<employee>
+	<empID/>
+	<dateOfEntry/>
+	<timeOfEntry/>
+	<firstName/>
+	<surName/>
+</employee>
+

@@ -1,0 +1,21 @@
+<ctLine>
+    <nr/>
+    <lineID/>
+    <lineType/>
+    <artGroupID/>
+    <artID/>
+    <qnt/>
+    <lineAmntIn/>
+    <lineAmntEx/>
+    <amntTp/>
+    <ppu/>
+    <costPrice/>
+    <costID/>
+    <costObjID/>
+    <projID/>
+    <empID/>
+    <lineAmntInAccID/>
+    <cashTransLineDescr/>
+    <lineDate/>
+    <lineTime/>
+</ctLine>

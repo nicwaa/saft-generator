@@ -1,0 +1,7 @@
+<reportPayOut>
+    <payOutType/>
+    <payOutNum/>
+    <payOutAmnt/>
+    <accID/>
+    <accDesc/>
+</reportPayOut>

@@ -1,0 +1,13 @@
+<company>
+    <companyIdent/>
+    <companyName/>
+    <taxRegistrationCountry/>
+    <taxRegIdent/>
+    <customersSuppliers/>
+    <generalLedger/>
+    <vatCodeDetails/>
+    <periods/>
+    <employees/>
+    <articles/>
+    <basics/>
+</company>

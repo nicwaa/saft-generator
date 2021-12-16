@@ -1,0 +1,9 @@
+<postalAddress>
+    <streetname/>
+    <number/>
+    <additionalAddressDetails/>
+    <city/>
+    <postalCode/>
+    <region/>
+    <country/>
+</postalAddress>

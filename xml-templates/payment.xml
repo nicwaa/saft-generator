@@ -1,0 +1,9 @@
+<payment>
+    <paymentType/>
+    <paidAmnt/>
+    <empID/>
+    <curCode/>
+    <exchRt/>
+    <paymentRefID/>
+    <accID/>
+</payment>

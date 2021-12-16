@@ -1,0 +1,8 @@
+<reportEmpPayment>
+    <empID/>
+    <paymentType/>
+    <paymentNum/>
+    <paymentAmnt/>
+    <accID/>
+    <accDesc/>
+</reportEmpPayment>

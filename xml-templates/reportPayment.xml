@@ -1,0 +1,7 @@
+<reportPayment>
+    <paymentType/>
+    <paymentNum/>
+    <paymentAmnt/>
+    <accID/>
+    <accDesc/>
+</reportPayment>
