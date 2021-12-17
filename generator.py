@@ -16,7 +16,8 @@ class XmlGenerator:
             self.root = Element(root, attrib=self.audit_attr)
         else:
             _root = root.__class__.__name__
-            _root = _root.replace(_root[0], _root[0].lower())
+            if _root[0].isupper():
+                _root = chr(ord(_root[0])+32) + _root[1:]
             self.root = Element(_root)
             for tple in root:
                 if tple[1] is not None:
@@ -34,8 +35,8 @@ class XmlGenerator:
     def append(self, element):
         self.root.append(element.root)
 
-    def append_to_sub_elements(self, target_tag, source):
-        self.root.find(target_tag).append(XmlGenerator(source).root)
+    def append_sub_element(self, target_tag, source):
+        self.root.find(target_tag).append(source.root)
 
     def remove_sub_element(self, tag):
         try:
@@ -46,7 +47,7 @@ class XmlGenerator:
 
 if __name__ == '__main__':
     header = XmlGenerator('header')
-    header.append_sub_elements('fiscalYear', 'header')
+    header.append_sub_element('fiscalYear', header)
 
     print(header)
 
