@@ -1,6 +1,6 @@
-from xml.etree.ElementTree import Element, SubElement, Comment, tostring, fromstring, dump
+from xml.etree.ElementTree import Element, SubElement, Comment, tostring, fromstring, dump, ElementTree
 from utils import prettify
-from dataclasses import dataclass, make_dataclass
+from dataclasses import fields
 
 
 class XmlGenerator:
@@ -11,16 +11,16 @@ class XmlGenerator:
         'xsi:schemaLocation': "urn:StandardAuditFile-Taxation-CashRegister:NO saft.xsd"
     }
 
-    def __init__(self, root_tag):
-        if root_tag == 'auditfile':
-            self.root = Element(root_tag, attrib=self.audit_attr)
+    def __init__(self, root):
+        if root == 'auditfile':
+            self.root = Element(root, attrib=self.audit_attr)
         else:
-            self.root = Element(root_tag)
-            with open(f'xml-templates/{root_tag}.xml', 'r') as f:
-                for element in fromstring(f.read()).iter():
-                    if element.tag == root_tag:
-                        continue
-                    SubElement(self.root, element.tag)
+            _root = root.__class__.__name__
+            _root = _root.replace(_root[0], _root[0].lower())
+            self.root = Element(_root)
+            for tple in root:
+                if tple[1] is not None:
+                    SubElement(self.root, tple[0]).text = tple[1]
 
     def __repr__(self):
         return prettify(self.root)
@@ -31,8 +31,11 @@ class XmlGenerator:
     def fill_sub_element(self, tag, text):
         self.root.find(tag).text = str(text) if type(text).__name__ != 'str' else text
 
-    def append_sub_elements(self, target_tag, source_tag):
-        self.root.find(target_tag).append(XmlGenerator(source_tag).root)
+    def append(self, element):
+        self.root.append(element.root)
+
+    def append_to_sub_elements(self, target_tag, source):
+        self.root.find(target_tag).append(XmlGenerator(source).root)
 
     def remove_sub_element(self, tag):
         try:

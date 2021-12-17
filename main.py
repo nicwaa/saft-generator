@@ -1,14 +1,26 @@
-
 from xml.etree.ElementTree import Element, SubElement, Comment, tostring, dump, canonicalize, fromstring
 from xml.dom.minidom import parseString
 from generator import XmlGenerator
-from utils import prettify
+import project_dataclasses as pdc
 
 # Generate base tag
 auditfile = XmlGenerator('auditfile')
 
 # Generate header
-header = XmlGenerator('header')
+header = XmlGenerator(
+    pdc.Header(
+        fiscalYear='2020',
+        startDate='2020-01-01',
+        endDate='2020-01-31',
+        curCode='NOK',
+        dateCreated='2021-03-30',
+        timeCreated='10:40:00',
+        softwareDesc='Kassasystemet',
+        softwareVersion='3.14.1.3',
+        softwareCompanyName='Kassasystemer AS',
+        auditfileVersion='1.0'
+    )
+)
 header.fill_sub_element('fiscalYear', 2020)
 header.fill_sub_element('startDate', '2020-01-01')
 header.fill_sub_element('endDate', '2020-01-31')
@@ -24,14 +36,13 @@ auditfileSender = XmlGenerator('auditfileSender')
 auditfileSender.fill_sub_element('taxRegistrationCountry', 'NO')
 auditfileSender.fill_sub_element('companyName', 'big popo')
 
-header.root.append(auditfileSender.root)
-auditfile.root.append(header.root)
+header.append(auditfileSender)
+auditfile.append(header)
 
 company = XmlGenerator('company')
-company.append_sub_elements('customersSuppliers', 'customerSupplier')
-auditfile.root.append(company.root)
+company.append_to_sub_elements('customersSuppliers', 'customerSupplier')
+auditfile.append(company)
 
-auditfile.remove_sub_element('header')
 
 print(auditfile)
 
