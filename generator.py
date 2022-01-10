@@ -17,7 +17,7 @@ class XmlGenerator:
         else:
             _root = root.__class__.__name__
             if _root[0].isupper():
-                _root = chr(ord(_root[0])+32) + _root[1:]
+                _root = _root[0].lower() + _root[1:]
             self.root = Element(_root)
             for tple in root:
                 if tple[1] is not None:
@@ -25,6 +25,9 @@ class XmlGenerator:
 
     def __repr__(self):
         return prettify(self.root)
+
+    def test(self):
+        print(self.root.tag)
 
     def add_sub_element(self, tag, text=None):
         SubElement(self.root, tag).text = str(text) if text is not None else ''

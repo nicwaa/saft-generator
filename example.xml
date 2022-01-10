@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<auditfile xmlns="urn:StandardAuditFile-Taxation-CashRegister:NO" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:StandardAuditFile-Taxation-CashRegister:NO saft.xsd">
+<auditfile xmlns="urn:StandardAuditFile-Taxation-CashRegister:NO"
+		   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		   xsi:schemaLocation="urn:StandardAuditFile-Taxation-CashRegister:NO saft.xsd">
 	<header>
 		<fiscalYear>2020</fiscalYear>
 		<startDate>2020-01-01</startDate>

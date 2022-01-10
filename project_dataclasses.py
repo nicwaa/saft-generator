@@ -1,10 +1,28 @@
 from typing import Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, Extra
+import enumerations as saft_enum
+
+
+class CountryCodeFormatError(Exception):
+    """
+    Raises an error if the length and case of the string provided is incorrect
+    """
+    def __init__(self, value: str, message: str) -> None:
+        self.value = value
+        self.message = message
+        super().__init__(message)
+
+
+class ConfiguredBaseModel(BaseModel):
+
+    class Config:
+        extra = Extra.forbid
+
 
 """ Data classes reflecting the xml elements required in the saft report """
 
 
-class Header(BaseModel):
+class Header(ConfiguredBaseModel):
     fiscalYear: str
     startDate: str
     endDate: str
@@ -18,44 +36,59 @@ class Header(BaseModel):
     headerComment: Optional[str]
     userID: Optional[str]
 
+    class AuditfileSender(ConfiguredBaseModel):
+        companyName: str
+        companyIdent: Optional[str]
+        taxRegistrationCountry: Optional[str]
+        taxRegIdent: Optional[str]
+        # streetAddress: Optional[object]
+        # postalAddress: Optional[object]
 
-class AuditfileSender(BaseModel):
-    companyName: str
-    companyIdent: Optional[str]
-    taxRegistrationCountry: Optional[str]
-    taxRegIdent: Optional[str]
-    # streetAddress: Optional[object]
-    # postalAddress: Optional[object]
 
-
-class StreetAddress(BaseModel):
+class StreetAddress(ConfiguredBaseModel):
     streetname: Optional[str]
     number: Optional[str]
     additionalAddressDetails: Optional[str]
     city: Optional[str]
     postalCode: Optional[str]
     region: Optional[str]
-    country: Optional[str]
+    country: Optional[saft_enum.CountryISOEnumeration]
+
+    # @validator('country')
+    # @classmethod
+    # def country_valid(cls, value):
+    #     if len(value) != 2 or value.islower():
+    #         raise CountryCodeFormatError(value=value,
+    #                                      message='Max string length: 2. Characters must be upper case. Example: NO')
+    #     return value
 
 
-class PostalAddress(BaseModel):
+class PostalAddress(ConfiguredBaseModel):
     streetname: Optional[str]
     number: Optional[str]
     additionalAddressDetails: Optional[str]
     city: str
     postalCode: str
     region: Optional[str]
-    country: Optional[str]
+    country: Optional[saft_enum.CountryISOEnumeration]
+
+    # @validator('country')
+    # @classmethod
+    # def country_valid(cls, value):
+    #     if len(value) != 2 or value.islower():
+    #         raise CountryCodeFormatError(value=value,
+    #                                      message='Max string length: 2. Characters must be upper case. Example: NO')
+    #     return value
 
 
-class Company(BaseModel):
+class Company(ConfiguredBaseModel):
     companyIdent: str
     companyName: str
     taxRegistrationCountry: Optional[str]
     taxRegIdent: Optional[str]
 
 
-class CustomerSupplier(BaseModel):
+class CustomerSupplier(ConfiguredBaseModel):
     custSupID: str
     custSupName: str
     custSupType: str
@@ -72,7 +105,7 @@ class CustomerSupplier(BaseModel):
         return 'customersSuppliers'
 
 
-class LedgerAccount(BaseModel):
+class LedgerAccount(ConfiguredBaseModel):
     accID: str
     accDesc: str
 
@@ -81,7 +114,7 @@ class LedgerAccount(BaseModel):
         return 'generalLedger'
 
 
-class VatCodeDetail(BaseModel):
+class VatCodeDetail(ConfiguredBaseModel):
     vatCode: str
     dateOfEntry: str
     vatDesc: Optional[str]
@@ -92,7 +125,7 @@ class VatCodeDetail(BaseModel):
         return 'vatCodeDetails'
 
 
-class Period(BaseModel):
+class Period(ConfiguredBaseModel):
     periodNumber: Optional[str]
     periodDesc: Optional[str]
     startDatePeriod: Optional[str]
@@ -105,7 +138,7 @@ class Period(BaseModel):
         return 'periods'
 
 
-class Employee(BaseModel):
+class Employee(ConfiguredBaseModel):
     empID: str
     dateOfEntry: str
     timeOfEntry: Optional[str]
@@ -116,12 +149,12 @@ class Employee(BaseModel):
         return 'employees'
 
 
-class EmployeeRole(BaseModel):
+class EmployeeRole(ConfiguredBaseModel):
     roleType: str
     roleTypeDesc: Optional[str]
 
 
-class Article(BaseModel):
+class Article(ConfiguredBaseModel):
     artID: str
     dateOfEntry: str
     artGroupID: Optional[str]
@@ -132,8 +165,8 @@ class Article(BaseModel):
         return 'articles'
 
 
-class Basic(BaseModel):
-    basicType: str
+class Basic(ConfiguredBaseModel):
+    basicType: saft_enum.BasicTypeEnumeration
     basicID: str
     predefinedBasicID: Optional[str]
     basicDesc: str
@@ -143,16 +176,16 @@ class Basic(BaseModel):
         return 'basics'
 
 
-class Location(BaseModel):
+class Location(ConfiguredBaseModel):
     name: str
 
 
-class Cashregister(BaseModel):
+class Cashregister(ConfiguredBaseModel):
     registerID: str
     regDesc: Optional[str]
 
 
-class Event(BaseModel):
+class Event(ConfiguredBaseModel):
     eventID: str
     eventType: str
     transID: Optional[str]
@@ -162,21 +195,21 @@ class Event(BaseModel):
     eventText: Optional[str]
 
 
-class EventReport(BaseModel):
+class EventReport(ConfiguredBaseModel):
     reportID: str
-    reportType: str
+    reportType: saft_enum.ReportTypeEnumeration
     companyIdent: str
     companyName: str
     reportDate: str
     reportTime: str
     registerID: str
 
-    class ReportTotalCashSales(BaseModel):
+    class ReportTotalCashSales(ConfiguredBaseModel):
         totalCashSaleAmnt: str
         accID: Optional[str]
         accDesc: Optional[str]
 
-    class ReportArtGroup(BaseModel):
+    class ReportArtGroup(ConfiguredBaseModel):
         artGroupID: str
         artGroupNum: str
         artGroupAmnt: str
@@ -187,7 +220,7 @@ class EventReport(BaseModel):
         def base():
             return 'reportArtGroups'
 
-    class ReportEmpArtGroup(BaseModel):
+    class ReportEmpArtGroup(ConfiguredBaseModel):
         empID: str
         artGroupID: str
         artGroupNum: str
@@ -199,7 +232,7 @@ class EventReport(BaseModel):
         def base():
             return 'reportEmpArtGroups'
 
-    class ReportPayment(BaseModel):
+    class ReportPayment(ConfiguredBaseModel):
         paymentType: str
         paymentNum: str
         paymentAmnt: str
@@ -210,7 +243,7 @@ class EventReport(BaseModel):
         def base():
             return 'reportPayments'
 
-    class ReportEmpPayment(BaseModel):
+    class ReportEmpPayment(ConfiguredBaseModel):
         empID: str
         paymentType: str
         paymentNum: str
@@ -222,13 +255,13 @@ class EventReport(BaseModel):
         def base():
             return 'reportEmpPayments'
 
-    class ReportTip(BaseModel):
+    class ReportTip(ConfiguredBaseModel):
         tipNum: str
         tipAmnt: str
         accID: Optional[str]
         accDesc: Optional[str]
 
-    class ReportCashSaleVat(BaseModel):
+    class ReportCashSaleVat(ConfiguredBaseModel):
         vatCode: Optional[str]
         vatPerc: str
         cashSaleAmnt: str
@@ -241,7 +274,7 @@ class EventReport(BaseModel):
         def base():
             return 'reportCashSalesVat'
 
-    class ReportEmpOpeningChangeFloat(BaseModel):
+    class ReportEmpOpeningChangeFloat(ConfiguredBaseModel):
         empID: str
         openingChangeFloatAmnt: str
         accID: Optional[str]
@@ -251,7 +284,7 @@ class EventReport(BaseModel):
         def base():
             return 'reportEmpOpeningChangeFloats'
 
-    class ReportCorrLine(BaseModel):
+    class ReportCorrLine(ConfiguredBaseModel):
         corrLineType: str
         corrLineNum: str
         corrLineAmnt: str
@@ -260,7 +293,7 @@ class EventReport(BaseModel):
         def base():
             return 'reportCorrLines'
 
-    class ReportPriceInquiry(BaseModel):
+    class ReportPriceInquiry(ConfiguredBaseModel):
         priceInquiryGroup: str
         priceInquiryNum: str
         priceInquiryAmnt: str
@@ -269,7 +302,7 @@ class EventReport(BaseModel):
         def base():
             return 'reportPriceInquiries'
 
-    class ReportOtherCorr(BaseModel):
+    class ReportOtherCorr(ConfiguredBaseModel):
         otherCorrType: str
         otherCorrNum: str
         otherCorrAmnt: str
@@ -278,19 +311,19 @@ class EventReport(BaseModel):
         def base():
             return 'reportOtherCorrs'
 
-    class ReportCreditSales(BaseModel):
+    class ReportCreditSales(ConfiguredBaseModel):
         creditSalesNum: str
         creditSalesAmnt: str
         accID: Optional[str]
         accDesc: Optional[str]
 
-    class ReportCreditMemos(BaseModel):
+    class ReportCreditMemos(ConfiguredBaseModel):
         creditMemosNum: str
         creditMemosAmnt: str
         accID: Optional[str]
         accDesc: Optional[str]
 
-    class ReportPayIn(BaseModel):
+    class ReportPayIn(ConfiguredBaseModel):
         payInType: str
         payInNum: str
         payInAmnt: str
@@ -301,7 +334,7 @@ class EventReport(BaseModel):
         def base():
             return 'reportPayIns'
 
-    class ReportPayOut(BaseModel):
+    class ReportPayOut(ConfiguredBaseModel):
         payOutType: str
         payOutNum: str
         payOutAmnt: str
@@ -313,7 +346,7 @@ class EventReport(BaseModel):
             return 'reportPayOuts'
 
 
-class EventReportAfterCashSalesVat(BaseModel):
+class EventReportAfterCashSalesVat(ConfiguredBaseModel):
     reportOpeningChangeFloat: str
     reportReceiptNum: str
     reportOpenCashBoxNum: str
@@ -328,27 +361,30 @@ class EventReportAfterCashSalesVat(BaseModel):
     reportVoidTransNum: str
     reportVoidTransAmnt: str
 
+    def append_target(self):
+        return 'eventReport'
 
-class EventReportAfterReportOtherCorr(BaseModel):
+
+class EventReportAfterReportOtherCorr(ConfiguredBaseModel):
     reportReceiptDeliveryNum: str
     reportReceiptDeliveryAmnt: str
     reportTrainingNum: str
     reportTrainingAmnt: str
 
 
-class EventReportLast(BaseModel):
+class EventReportLast(ConfiguredBaseModel):
     reportGrandTotalSales: str
     reportGrandTotalReturn: str
     reportGrandTotalSalesNet: str
 
 
-class Cashtransaction(BaseModel):
+class Cashtransaction(ConfiguredBaseModel):
     nr: str
     transID: str
     transType: Optional[str]
     transAmntIn: str
     transAmntEx: str
-    amntTp: str
+    amntTp: saft_enum.DebitCreditEnumeration
     empID: Optional[str]
     custSupID: Optional[str]
     periodNumber: Optional[str]
@@ -360,7 +396,7 @@ class Cashtransaction(BaseModel):
     refID: Optional[str]
     desc: Optional[str]
 
-    class CtLine(BaseModel):
+    class CtLine(ConfiguredBaseModel):
         nr: str
         lineID: str
         lineType: str
@@ -369,7 +405,7 @@ class Cashtransaction(BaseModel):
         qnt: Optional[str]
         lineAmntIn: str
         lineAmntEx: str
-        amntTp: str
+        amntTp: saft_enum.DebitCreditEnumeration
         ppu: Optional[str]
         costPrice: Optional[str]
         costID: Optional[str]
@@ -382,42 +418,42 @@ class Cashtransaction(BaseModel):
         lineTime: Optional[str]
 
 
-class Vat(BaseModel):
-    vatCode: str
-    vatPerc: str
-    vatAmnt: Optional[str]
-    vatAmntTp: str
-    vatBasAmnt: str
-    accID: str
+class Vat(ConfiguredBaseModel):
+    vatCode: Optional[str]
+    vatPerc: Optional[str]
+    vatAmnt: str
+    vatAmntTp: Optional[str]
+    vatBasAmnt: Optional[str]
+    accID: Optional[str]
 
 
-class Savings(BaseModel):
+class Savings(ConfiguredBaseModel):
     savingsType: str
     savingsUnits: str
     empID: Optional[str]
     accID: Optional[str]
 
 
-class Discount(BaseModel):
+class Discount(ConfiguredBaseModel):
     dscTp: str
     dscAmnt: str
     empID: Optional[str]
     accID: Optional[str]
 
 
-class Raise(BaseModel):
+class Raise(ConfiguredBaseModel):
     raiseType: str
     raiseAmnt: str
     empID: Optional[str]
     accID: Optional[str]
 
 
-class Rounding(BaseModel):
+class Rounding(ConfiguredBaseModel):
     roundingAmnt: Optional[str]
     accID: Optional[str]
 
 
-class Payment(BaseModel):
+class Payment(ConfiguredBaseModel):
     paymentType: str
     paidAmnt: str
     empID: Optional[str]
@@ -427,7 +463,7 @@ class Payment(BaseModel):
     accID: Optional[str]
 
 
-class CashtransactionLast(BaseModel):
+class CashtransactionLast(ConfiguredBaseModel):
     signature: str
     keyVersion: str
     receiptNum: Optional[str]
@@ -436,5 +472,3 @@ class CashtransactionLast(BaseModel):
     receiptDeliveryNum: Optional[str]
     voidTransaction: Optional[str]
     trainingID: Optional[str]
-
-
